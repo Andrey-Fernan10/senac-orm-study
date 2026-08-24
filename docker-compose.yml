@@ -1,0 +1,31 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: adriano
+      MYSQL_DATABASE: senac_orm
+      MYSQL_USER: adriano
+      MYSQL_PASSWORD: adriano
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: adriano
+      POSTGRES_PASSWORD: adriano
+      POSTGRES_DB: senac_orm
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  mariadb_data:
+  postgres_data:
