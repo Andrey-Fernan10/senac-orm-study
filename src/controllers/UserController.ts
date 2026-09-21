@@ -8,7 +8,7 @@ export class UserController extends BaseController {
     return AppDataSource.getRepository(User);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const users = await this.repository.find({
       order: { createdAt: "ASC" },
       relations: { userRoles: true, userGroups: true },
@@ -16,7 +16,7 @@ export class UserController extends BaseController {
     this.ok(res, users);
   });
 
-  buscarPorId = this.handle(async (req: Request, res: Response) => {
+  findById = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -37,11 +37,14 @@ export class UserController extends BaseController {
     this.ok(res, user);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const { username, email, passwordHash, isActive } = req.body;
 
     if (!username || !email || !passwordHash) {
-      this.badRequest(res, "Campos obrigatórios: username, email, passwordHash");
+      this.badRequest(
+        res,
+        "Campos obrigatórios: username, email, passwordHash",
+      );
       return;
     }
 
@@ -52,11 +55,11 @@ export class UserController extends BaseController {
       isActive: isActive ?? true,
     });
 
-    const salvo = await this.repository.save(user);
-    this.created(res, salvo);
+    const saved = await this.repository.save(user);
+    this.created(res, saved);
   });
 
-  atualizar = this.handle(async (req: Request, res: Response) => {
+  update = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -79,11 +82,11 @@ export class UserController extends BaseController {
     if (isActive !== undefined) user.isActive = isActive;
     if (lastLogin !== undefined) user.lastLogin = lastLogin;
 
-    const atualizado = await this.repository.save(user);
-    this.ok(res, atualizado);
+    const updated = await this.repository.save(user);
+    this.ok(res, updated);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {

@@ -8,7 +8,7 @@ export class GroupController extends BaseController {
     return AppDataSource.getRepository(Group);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const groups = await this.repository.find({
       order: { name: "ASC" },
       relations: { userGroups: true, groupRoles: true },
@@ -16,7 +16,7 @@ export class GroupController extends BaseController {
     this.ok(res, groups);
   });
 
-  buscarPorId = this.handle(async (req: Request, res: Response) => {
+  findById = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -40,7 +40,7 @@ export class GroupController extends BaseController {
     this.ok(res, group);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const { name, description } = req.body;
 
     if (!name) {
@@ -53,11 +53,11 @@ export class GroupController extends BaseController {
       description: description ?? null,
     });
 
-    const salvo = await this.repository.save(group);
-    this.created(res, salvo);
+    const saved = await this.repository.save(group);
+    this.created(res, saved);
   });
 
-  atualizar = this.handle(async (req: Request, res: Response) => {
+  update = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -77,11 +77,11 @@ export class GroupController extends BaseController {
     if (name !== undefined) group.name = name;
     if (description !== undefined) group.description = description;
 
-    const atualizado = await this.repository.save(group);
-    this.ok(res, atualizado);
+    const updated = await this.repository.save(group);
+    this.ok(res, updated);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {

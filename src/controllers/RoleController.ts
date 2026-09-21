@@ -8,7 +8,7 @@ export class RoleController extends BaseController {
     return AppDataSource.getRepository(Role);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const roles = await this.repository.find({
       order: { name: "ASC" },
       relations: { rolePermissions: true },
@@ -16,7 +16,7 @@ export class RoleController extends BaseController {
     this.ok(res, roles);
   });
 
-  buscarPorId = this.handle(async (req: Request, res: Response) => {
+  findById = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -41,7 +41,7 @@ export class RoleController extends BaseController {
     this.ok(res, role);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const { name, description, isSystem } = req.body;
 
     if (!name) {
@@ -55,11 +55,11 @@ export class RoleController extends BaseController {
       isSystem: isSystem ?? false,
     });
 
-    const salvo = await this.repository.save(role);
-    this.created(res, salvo);
+    const saved = await this.repository.save(role);
+    this.created(res, saved);
   });
 
-  atualizar = this.handle(async (req: Request, res: Response) => {
+  update = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -80,11 +80,11 @@ export class RoleController extends BaseController {
     if (description !== undefined) role.description = description;
     if (isSystem !== undefined) role.isSystem = isSystem;
 
-    const atualizado = await this.repository.save(role);
-    this.ok(res, atualizado);
+    const updated = await this.repository.save(role);
+    this.ok(res, updated);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {

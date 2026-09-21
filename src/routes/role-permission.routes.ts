@@ -4,9 +4,9 @@ import { RolePermissionController } from "../controllers/RolePermissionControlle
 const router = Router();
 const controller = new RolePermissionController();
 
-router.get("/", controller.listar);
-router.get("/:roleId/:permissionId", controller.buscarPorIds);
-router.post("/", controller.criar);
-router.delete("/:roleId/:permissionId", controller.remover);
+router.get("/", controller.list);
+router.get("/:roleId/:permissionId", controller.findByIds);
+router.post("/", controller.create);
+router.delete("/:roleId/:permissionId", controller.remove);
 
 export default router;

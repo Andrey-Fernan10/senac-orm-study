@@ -11,7 +11,7 @@ type AsyncHandler = (
  * Camada Controller — classe base.
  *
  * Controllers concretos herdam desta classe e implementam
- * as ações (listar, buscar, criar, atualizar, remover).
+ * as ações (list, find, create, update, remove).
  * A View JSON é usada para padronizar as respostas.
  */
 export abstract class BaseController {

@@ -10,7 +10,7 @@ export class UserGroupController extends BaseController {
     return AppDataSource.getRepository(UserGroup);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const items = await this.repository.find({
       order: { joinedAt: "DESC" },
       relations: { user: true, group: true },
@@ -18,7 +18,7 @@ export class UserGroupController extends BaseController {
     this.ok(res, items);
   });
 
-  buscarPorIds = this.handle(async (req: Request, res: Response) => {
+  findByIds = this.handle(async (req: Request, res: Response) => {
     const { userId, groupId } = req.params;
 
     if (!userId || !groupId) {
@@ -39,7 +39,7 @@ export class UserGroupController extends BaseController {
     this.ok(res, item);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const { userId, groupId } = req.body;
 
     if (!userId || !groupId) {
@@ -59,18 +59,18 @@ export class UserGroupController extends BaseController {
       return;
     }
 
-    const existente = await this.repository.findOneBy({ userId, groupId });
-    if (existente) {
+    const existing = await this.repository.findOneBy({ userId, groupId });
+    if (existing) {
       this.badRequest(res, "Este usuário já pertence ao grupo");
       return;
     }
 
     const item = this.repository.create({ userId, groupId });
-    const salvo = await this.repository.save(item);
-    this.created(res, salvo);
+    const saved = await this.repository.save(item);
+    this.created(res, saved);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { userId, groupId } = req.params;
 
     if (!userId || !groupId) {

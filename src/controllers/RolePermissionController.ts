@@ -10,7 +10,7 @@ export class RolePermissionController extends BaseController {
     return AppDataSource.getRepository(RolePermission);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const items = await this.repository.find({
       order: { grantedAt: "DESC" },
       relations: { role: true, permission: true },
@@ -18,7 +18,7 @@ export class RolePermissionController extends BaseController {
     this.ok(res, items);
   });
 
-  buscarPorIds = this.handle(async (req: Request, res: Response) => {
+  findByIds = this.handle(async (req: Request, res: Response) => {
     const { roleId, permissionId } = req.params;
 
     if (!roleId || !permissionId) {
@@ -39,7 +39,7 @@ export class RolePermissionController extends BaseController {
     this.ok(res, item);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const { roleId, permissionId } = req.body;
 
     if (!roleId || !permissionId) {
@@ -61,18 +61,18 @@ export class RolePermissionController extends BaseController {
       return;
     }
 
-    const existente = await this.repository.findOneBy({ roleId, permissionId });
-    if (existente) {
+    const existing = await this.repository.findOneBy({ roleId, permissionId });
+    if (existing) {
       this.badRequest(res, "Esta permissão já está atribuída ao papel");
       return;
     }
 
     const item = this.repository.create({ roleId, permissionId });
-    const salvo = await this.repository.save(item);
-    this.created(res, salvo);
+    const saved = await this.repository.save(item);
+    this.created(res, saved);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { roleId, permissionId } = req.params;
 
     if (!roleId || !permissionId) {

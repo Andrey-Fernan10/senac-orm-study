@@ -4,9 +4,9 @@ import { UserGroupController } from "../controllers/UserGroupController";
 const router = Router();
 const controller = new UserGroupController();
 
-router.get("/", controller.listar);
-router.get("/:userId/:groupId", controller.buscarPorIds);
-router.post("/", controller.criar);
-router.delete("/:userId/:groupId", controller.remover);
+router.get("/", controller.list);
+router.get("/:userId/:groupId", controller.findByIds);
+router.post("/", controller.create);
+router.delete("/:userId/:groupId", controller.remove);
 
 export default router;

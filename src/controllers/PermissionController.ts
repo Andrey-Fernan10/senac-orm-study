@@ -8,14 +8,14 @@ export class PermissionController extends BaseController {
     return AppDataSource.getRepository(Permission);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const permissions = await this.repository.find({
       order: { resource: "ASC", action: "ASC" },
     });
     this.ok(res, permissions);
   });
 
-  buscarPorId = this.handle(async (req: Request, res: Response) => {
+  findById = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -36,7 +36,7 @@ export class PermissionController extends BaseController {
     this.ok(res, permission);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const { name, resource, action, description } = req.body;
 
     if (!name || !resource || !action) {
@@ -51,11 +51,11 @@ export class PermissionController extends BaseController {
       description: description ?? null,
     });
 
-    const salvo = await this.repository.save(permission);
-    this.created(res, salvo);
+    const saved = await this.repository.save(permission);
+    this.created(res, saved);
   });
 
-  atualizar = this.handle(async (req: Request, res: Response) => {
+  update = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -77,11 +77,11 @@ export class PermissionController extends BaseController {
     if (action !== undefined) permission.action = action;
     if (description !== undefined) permission.description = description;
 
-    const atualizado = await this.repository.save(permission);
-    this.ok(res, atualizado);
+    const updated = await this.repository.save(permission);
+    this.ok(res, updated);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {

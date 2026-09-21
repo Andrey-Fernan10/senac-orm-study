@@ -10,7 +10,7 @@ export class GroupRoleController extends BaseController {
     return AppDataSource.getRepository(GroupRole);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const items = await this.repository.find({
       order: { grantedAt: "DESC" },
       relations: { group: true, role: true },
@@ -18,7 +18,7 @@ export class GroupRoleController extends BaseController {
     this.ok(res, items);
   });
 
-  buscarPorIds = this.handle(async (req: Request, res: Response) => {
+  findByIds = this.handle(async (req: Request, res: Response) => {
     const { groupId, roleId } = req.params;
 
     if (!groupId || !roleId) {
@@ -39,7 +39,7 @@ export class GroupRoleController extends BaseController {
     this.ok(res, item);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const { groupId, roleId } = req.body;
 
     if (!groupId || !roleId) {
@@ -59,18 +59,18 @@ export class GroupRoleController extends BaseController {
       return;
     }
 
-    const existente = await this.repository.findOneBy({ groupId, roleId });
-    if (existente) {
+    const existing = await this.repository.findOneBy({ groupId, roleId });
+    if (existing) {
       this.badRequest(res, "Este papel já está atribuído ao grupo");
       return;
     }
 
     const item = this.repository.create({ groupId, roleId });
-    const salvo = await this.repository.save(item);
-    this.created(res, salvo);
+    const saved = await this.repository.save(item);
+    this.created(res, saved);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { groupId, roleId } = req.params;
 
     if (!groupId || !roleId) {

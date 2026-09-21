@@ -12,7 +12,7 @@ export class RbacAuditLogController extends BaseController {
     return AppDataSource.getRepository(RbacAuditLog);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const logs = await this.repository.find({
       order: { createdAt: "DESC" },
       relations: {
@@ -25,7 +25,7 @@ export class RbacAuditLogController extends BaseController {
     this.ok(res, logs);
   });
 
-  buscarPorId = this.handle(async (req: Request, res: Response) => {
+  findById = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -51,7 +51,7 @@ export class RbacAuditLogController extends BaseController {
     this.ok(res, log);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const {
       userId,
       actionType,
@@ -75,11 +75,11 @@ export class RbacAuditLogController extends BaseController {
       ipAddress: ipAddress ?? null,
     });
 
-    const salvo = await this.repository.save(log);
-    this.created(res, salvo);
+    const saved = await this.repository.save(log);
+    this.created(res, saved);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {

@@ -27,7 +27,7 @@ Requisição HTTP
 Resposta JSON
 ```
 
-**Exemplo:** `GET /api/produtos/1` → `ProdutoController.buscarPorId` → consulta `Produto` no banco → retorna JSON.
+**Exemplo:** `GET /api/produtos/1` → `ProdutoController.findById` → consulta `Produto` no banco → retorna JSON.
 
 ---
 
@@ -84,7 +84,7 @@ Cada ação é um método do controller, envolvido por `this.handle()`.
 ### Listar todos — `GET /api/produtos`
 
 ```typescript
-listar = this.handle(async (_req: Request, res: Response) => {
+list = this.handle(async (_req: Request, res: Response) => {
   const produtos = await this.repository.find({
     order: { id: "ASC" },
   });
@@ -95,7 +95,7 @@ listar = this.handle(async (_req: Request, res: Response) => {
 ### Buscar por ID — `GET /api/produtos/:id`
 
 ```typescript
-buscarPorId = this.handle(async (req: Request, res: Response) => {
+findById = this.handle(async (req: Request, res: Response) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
@@ -117,7 +117,7 @@ buscarPorId = this.handle(async (req: Request, res: Response) => {
 ### Criar — `POST /api/produtos`
 
 ```typescript
-criar = this.handle(async (req: Request, res: Response) => {
+create = this.handle(async (req: Request, res: Response) => {
   const { nome, preco, estoque } = req.body;
 
   if (!nome || preco === undefined) {
@@ -131,15 +131,15 @@ criar = this.handle(async (req: Request, res: Response) => {
     estoque: estoque ?? 0,
   });
 
-  const salvo = await this.repository.save(produto);
-  this.created(res, salvo);
+  const saved = await this.repository.save(produto);
+  this.created(res, saved);
 });
 ```
 
 ### Atualizar — `PUT /api/produtos/:id`
 
 ```typescript
-atualizar = this.handle(async (req: Request, res: Response) => {
+update = this.handle(async (req: Request, res: Response) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
@@ -160,15 +160,15 @@ atualizar = this.handle(async (req: Request, res: Response) => {
   if (preco !== undefined) produto.preco = preco;
   if (estoque !== undefined) produto.estoque = estoque;
 
-  const atualizado = await this.repository.save(produto);
-  this.ok(res, atualizado);
+  const updated = await this.repository.save(produto);
+  this.ok(res, updated);
 });
 ```
 
 ### Remover — `DELETE /api/produtos/:id`
 
 ```typescript
-remover = this.handle(async (req: Request, res: Response) => {
+remove = this.handle(async (req: Request, res: Response) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
@@ -205,11 +205,11 @@ import { ProdutoController } from "../controllers/ProdutoController";
 const router = Router();
 const controller = new ProdutoController();
 
-router.get("/", controller.listar);
-router.get("/:id", controller.buscarPorId);
-router.post("/", controller.criar);
-router.put("/:id", controller.atualizar);
-router.delete("/:id", controller.remover);
+router.get("/", controller.list);
+router.get("/:id", controller.findById);
+router.post("/", controller.create);
+router.put("/:id", controller.update);
+router.delete("/:id", controller.remove);
 
 export default router;
 ```
@@ -218,13 +218,13 @@ export default router;
 
 | Método HTTP | Rota            | Ação do controller | Descrição        |
 |-------------|-----------------|--------------------|------------------|
-| `GET`       | `/produtos`     | `listar`           | Lista todos      |
-| `GET`       | `/produtos/:id` | `buscarPorId`      | Busca um         |
-| `POST`      | `/produtos`     | `criar`            | Cria novo        |
-| `PUT`       | `/produtos/:id` | `atualizar`        | Atualiza existente |
-| `DELETE`    | `/produtos/:id` | `remover`          | Remove           |
+| `GET`       | `/produtos`     | `list`             | Lista todos      |
+| `GET`       | `/produtos/:id` | `findById`         | Busca um         |
+| `POST`      | `/produtos`     | `create`           | Cria novo        |
+| `PUT`       | `/produtos/:id` | `update`           | Atualiza existente |
+| `DELETE`    | `/produtos/:id` | `remove`           | Remove           |
 
-> Use substantivos no plural (`/produtos`, `/usuarios`), nunca verbos (`/listarProdutos`).
+> Use substantivos no plural (`/produtos`, `/usuarios`), nunca verbos (`/listProducts`).
 
 ---
 
@@ -371,7 +371,7 @@ Para cada novo recurso (ex.: `Produto`), você cria ou altera:
 - [ ] Entidade criada em `src/models/entities/`
 - [ ] Controller criado herdando `BaseController`
 - [ ] Métodos CRUD implementados com `this.handle()`
-- [ ] Validação de campos obrigatórios no `criar`
+- [ ] Validação de campos obrigatórios no `create`
 - [ ] Validação de ID numérico nos métodos com `:id`
 - [ ] Arquivo de rotas criado com verbos HTTP corretos
 - [ ] Rotas registradas em `src/routes/index.ts`

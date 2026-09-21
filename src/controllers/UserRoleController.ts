@@ -10,7 +10,7 @@ export class UserRoleController extends BaseController {
     return AppDataSource.getRepository(UserRole);
   }
 
-  listar = this.handle(async (_req: Request, res: Response) => {
+  list = this.handle(async (_req: Request, res: Response) => {
     const items = await this.repository.find({
       order: { grantedAt: "DESC" },
       relations: { user: true, role: true, grantedByUser: true },
@@ -18,7 +18,7 @@ export class UserRoleController extends BaseController {
     this.ok(res, items);
   });
 
-  buscarPorIds = this.handle(async (req: Request, res: Response) => {
+  findByIds = this.handle(async (req: Request, res: Response) => {
     const { userId, roleId } = req.params;
 
     if (!userId || !roleId) {
@@ -39,7 +39,7 @@ export class UserRoleController extends BaseController {
     this.ok(res, item);
   });
 
-  criar = this.handle(async (req: Request, res: Response) => {
+  create = this.handle(async (req: Request, res: Response) => {
     const { userId, roleId, grantedBy } = req.body;
 
     if (!userId || !roleId) {
@@ -62,8 +62,8 @@ export class UserRoleController extends BaseController {
       return;
     }
 
-    const existente = await this.repository.findOneBy({ userId, roleId });
-    if (existente) {
+    const existing = await this.repository.findOneBy({ userId, roleId });
+    if (existing) {
       this.badRequest(res, "Este papel já está atribuído ao usuário");
       return;
     }
@@ -82,11 +82,11 @@ export class UserRoleController extends BaseController {
       grantedBy: grantedBy ?? null,
     });
 
-    const salvo = await this.repository.save(item);
-    this.created(res, salvo);
+    const saved = await this.repository.save(item);
+    this.created(res, saved);
   });
 
-  remover = this.handle(async (req: Request, res: Response) => {
+  remove = this.handle(async (req: Request, res: Response) => {
     const { userId, roleId } = req.params;
 
     if (!userId || !roleId) {

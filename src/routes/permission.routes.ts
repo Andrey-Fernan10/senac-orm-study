@@ -4,10 +4,10 @@ import { PermissionController } from "../controllers/PermissionController";
 const router = Router();
 const controller = new PermissionController();
 
-router.get("/", controller.listar);
-router.get("/:id", controller.buscarPorId);
-router.post("/", controller.criar);
-router.put("/:id", controller.atualizar);
-router.delete("/:id", controller.remover);
+router.get("/", controller.list);
+router.get("/:id", controller.findById);
+router.post("/", controller.create);
+router.put("/:id", controller.update);
+router.delete("/:id", controller.remove);
 
 export default router;

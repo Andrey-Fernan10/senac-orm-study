@@ -4,9 +4,9 @@ import { GroupRoleController } from "../controllers/GroupRoleController";
 const router = Router();
 const controller = new GroupRoleController();
 
-router.get("/", controller.listar);
-router.get("/:groupId/:roleId", controller.buscarPorIds);
-router.post("/", controller.criar);
-router.delete("/:groupId/:roleId", controller.remover);
+router.get("/", controller.list);
+router.get("/:groupId/:roleId", controller.findByIds);
+router.post("/", controller.create);
+router.delete("/:groupId/:roleId", controller.remove);
 
 export default router;
